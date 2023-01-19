@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "sentyblog",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authsentyblog9e2d0636",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

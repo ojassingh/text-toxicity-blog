@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sentyblog-dev-135010-authRole",
+      "UnauthRoleArn": "arn:aws:iam::449775622281:role/amplify-sentyblog-dev-135010-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::449775622281:role/amplify-sentyblog-dev-135010-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-sentyblog-dev-135010-deployment",
+      "UnauthRoleName": "amplify-sentyblog-dev-135010-unauthRole",
+      "StackName": "amplify-sentyblog-dev-135010",
+      "StackId": "arn:aws:cloudformation:us-east-1:449775622281:stack/amplify-sentyblog-dev-135010/1a9675f0-982a-11ed-9551-12db7f23c30b",
+      "AmplifyAppId": "d1mgehhluqp5lt"
+    },
+    "categories": {
+      "auth": {
+        "sentyblog9e2d0636": {}
+      },
+      "api": {
+        "sentyblog": {}
+      }
+    }
+  }
+}
