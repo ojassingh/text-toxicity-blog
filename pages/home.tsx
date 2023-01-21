@@ -31,7 +31,7 @@ export async function getServerSideProps({ req } : any) {
   }
 }
 
-async function handleCreatePost(event : any, toxic: any) {
+async function handleCreatePost(event : any) {
   event.preventDefault();
 
   async function analyseToxic(value: any){
@@ -39,16 +39,21 @@ async function handleCreatePost(event : any, toxic: any) {
     const threshold = 0.9;
     let labelsToInclude = ["insult", "toxicity"];
 
-    toxicity.load(threshold, labelsToInclude).then(model => {
+    let prediction = toxicity.load(threshold, labelsToInclude).then(async model => {
     // Now you can use the `model` object to label sentences. 
-    model.classify([value]).then(predictions => {
-      console.log(predictions)
+    let prediciton = await model.classify([value]).then(predictions => {
+      return predictions
     });
-    });
-  }
+
+    return prediciton;
+  });
+    return prediction;
+}
+
 
   const form = new FormData(event.target);
-  analyseToxic(form.get('content'))
+  let isToxic = await analyseToxic(form.get('content')).then(data => console.log("Data: ", data))
+
 
   // try {
   //   const { data } : any = await API.graphql({
@@ -58,7 +63,7 @@ async function handleCreatePost(event : any, toxic: any) {
   //       input: {
   //         title: form.get('title'),
   //         content: form.get('content'),
-  //         toxic: toxic
+  //         toxic: isToxic
   //       }
   //     }
   //   });
@@ -74,7 +79,6 @@ async function handleCreatePost(event : any, toxic: any) {
 export default function Home({ posts = [] }) {
 
   const [value, setValue] = useState("")
-  const [toxic, setToxic] = useState(false)
 
   return (
     <div className="">
@@ -88,10 +92,10 @@ export default function Home({ posts = [] }) {
         <Authenticator>
         <h1 className="">Amplify + Next.js</h1>
 
-        <p className="">
-          <code className="">{posts.length}</code>
+        <div className="">
+          <p className="">{posts.length} yet.</p>
           posts
-        </p>
+        </div>
 
         <div className="">
           {posts.map((post : any) => (
@@ -105,7 +109,7 @@ export default function Home({ posts = [] }) {
             <h3 className="">New Post</h3>
 
             
-              <form onSubmit={(event)=>{handleCreatePost(event, toxic)}}>
+              <form onSubmit={(event)=>{handleCreatePost(event)}}>
                 <fieldset>
                   <legend className='text-2xl'>Title</legend>
                   <input
