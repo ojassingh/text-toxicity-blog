@@ -33,67 +33,7 @@ export async function getServerSideProps({ req } : any) {
 async function handleCreatePost(event : any, toxic: any) {
   event.preventDefault();
 
-  // const form = new FormData(event.target);
-
-  // try {
-  //   const { data } : any = await API.graphql({
-  //     authMode: 'AMAZON_COGNITO_USER_POOLS',
-  //     query: createPost,
-  //     variables: {
-  //       input: {
-  //         title: form.get('title'),
-  //         content: form.get('content'),
-  //         toxic: toxic
-  //       }
-  //     }
-  //   });
-
-  //   window.location.href = `/posts/${data.createPost.id}`;
-  // } catch (errors : any) {
-  //   console.error(...errors);
-  //   throw new Error(errors[0].message);
-  // }
-
-  let threshold = 0.9;
-  toxicity.load(threshold).then((model : any) => {
-    const sentences = ['fuck you'];
-
-    model.classify(sentences).then((predictions : any) => {
-      // `predictions` is an array of objects, one for each prediction head,
-      // that contains the raw probabilities for each input along with the
-      // final prediction in `match` (either `true` or `false`).
-      // If neither prediction exceeds the threshold, `match` is `null`.
-  
-      console.log(predictions);
-      /*
-      prints:
-      {
-        "label": "identity_attack",
-        "results": [{
-          "probabilities": [0.9659664034843445, 0.03403361141681671],
-          "match": false
-        }]
-      },
-      {
-        "label": "insult",
-        "results": [{
-          "probabilities": [0.08124706149101257, 0.9187529683113098],
-          "match": true
-        }]
-      },
-      ...
-       */
-    });
-  });
-
-}
-
-export default function Home({ posts = [] }) {
-
-  const [value, setValue] = useState("")
-  const [toxic, setToxic] = useState(false)
-
-  const analyseToxic = () => {
+  async function analyseToxic(value: any){
     let result = false;
     const threshold = 0.9;
 
@@ -127,11 +67,36 @@ export default function Home({ posts = [] }) {
          */
       });
     });
-
-
-    
-    // setToxic(result)
   }
+
+  const form = new FormData(event.target);
+  let predictions = await analyseToxic(form.get('content'))
+
+  // try {
+  //   const { data } : any = await API.graphql({
+  //     authMode: 'AMAZON_COGNITO_USER_POOLS',
+  //     query: createPost,
+  //     variables: {
+  //       input: {
+  //         title: form.get('title'),
+  //         content: form.get('content'),
+  //         toxic: toxic
+  //       }
+  //     }
+  //   });
+
+  //   window.location.href = `/posts/${data.createPost.id}`;
+  // } catch (errors : any) {
+  //   console.error(...errors);
+  //   throw new Error(errors[0].message);
+  // }
+
+}
+
+export default function Home({ posts = [] }) {
+
+  const [value, setValue] = useState("")
+  const [toxic, setToxic] = useState(false)
 
   return (
     <div className="">
@@ -179,7 +144,7 @@ export default function Home({ posts = [] }) {
                     value={value}
                     onChange={(e)=>{
                       setValue(e.target.value);
-                      console.log(value)
+                      // console.log(value)
                       // analyseToxic()
                     }}
                   />
