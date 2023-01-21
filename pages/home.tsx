@@ -8,7 +8,8 @@ import awsExports from '../src/aws-exports';
 import { createPost } from '../src/graphql/mutations';
 import { listPosts } from '../src/graphql/queries';
 require('@tensorflow/tfjs');
-const toxicity = require('@tensorflow-models/toxicity');
+// const toxicity = require('@tensorflow-models/toxicity');
+import * as toxicity from '@tensorflow-models/toxicity';
 import { useState } from 'react';
 
 Amplify.configure({ ...awsExports, ssr: true });
@@ -36,41 +37,18 @@ async function handleCreatePost(event : any, toxic: any) {
   async function analyseToxic(value: any){
     let result = false;
     const threshold = 0.9;
+    let labelsToInclude = ["insult", "toxicity"];
 
-    toxicity.load(threshold).then((model : any) => {
-      const sentences = [value];
-
-      model.classify(sentences).then((predictions : any) => {
-        // `predictions` is an array of objects, one for each prediction head,
-        // that contains the raw probabilities for each input along with the
-        // final prediction in `match` (either `true` or `false`).
-        // If neither prediction exceeds the threshold, `match` is `null`.
-    
-        console.log(predictions);
-        /*
-        prints:
-        {
-          "label": "identity_attack",
-          "results": [{
-            "probabilities": [0.9659664034843445, 0.03403361141681671],
-            "match": false
-          }]
-        },
-        {
-          "label": "insult",
-          "results": [{
-            "probabilities": [0.08124706149101257, 0.9187529683113098],
-            "match": true
-          }]
-        },
-        ...
-         */
-      });
+    toxicity.load(threshold, labelsToInclude).then(model => {
+    // Now you can use the `model` object to label sentences. 
+    model.classify([value]).then(predictions => {
+      console.log(predictions)
+    });
     });
   }
 
   const form = new FormData(event.target);
-  let predictions = await analyseToxic(form.get('content'))
+  analyseToxic(form.get('content'))
 
   // try {
   //   const { data } : any = await API.graphql({
