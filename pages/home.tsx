@@ -155,17 +155,17 @@ export default function Home({ posts = [] }) {
                         </div>
                         <div>
                           <strong>Obscene: </strong>
-                          Match: {obscene.results[0].match ? "True" : "False"} |
+                          Match: {obscene.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
                           Probability: {obscene.results[0].probabilities[1]}
                         </div>
                         <div>
                           <strong>Severe: </strong>
-                          Match: {severe.results[0].match ? "True" : "False"} |
+                          Match: {severe.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
                           Probability: {severe.results[0].probabilities[1]}
                         </div>
                         <div>
                           <strong>Toxicity: </strong>
-                          Match: {toxic.results[0].match ? "True" : "False"} |
+                          Match: {toxic.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
                           Probability: {toxic.results[0].probabilities[1]}
                         </div>
                       </div>
