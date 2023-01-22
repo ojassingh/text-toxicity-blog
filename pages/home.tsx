@@ -151,22 +151,22 @@ export default function Home({ posts = [] }) {
                         <div>
                           <strong>Insult: </strong>
                           Match: {insult.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
-                          Probability: {insult.results[0].probabilities[1]}
+                          Probability: <span className="text-blue-500">{insult.results[0].probabilities[1]}</span>
                         </div>
                         <div>
                           <strong>Obscene: </strong>
                           Match: {obscene.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
-                          Probability: {obscene.results[0].probabilities[1]}
+                          Probability: <span className="text-blue-500">{obscene.results[0].probabilities[1]}</span>
                         </div>
                         <div>
                           <strong>Severe: </strong>
                           Match: {severe.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
-                          Probability: {severe.results[0].probabilities[1]}
+                          Probability: <span className="text-blue-500">{severe.results[0].probabilities[1]}</span>
                         </div>
                         <div>
                           <strong>Toxicity: </strong>
                           Match: {toxic.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
-                          Probability: {toxic.results[0].probabilities[1]}
+                          Probability: <span className="text-blue-500">{toxic.results[0].probabilities[1]}</span>
                         </div>
                       </div>
                       <button
