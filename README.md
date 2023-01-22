@@ -3,6 +3,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Here is a glance at it: 
 
 <img width="1437" alt="Screenshot 2023-01-21 at 11 46 41 PM" src="https://user-images.githubusercontent.com/64021709/213901084-3771a34c-c44d-4b11-85db-64337768058f.png">
+<img width="1440" alt="Screenshot 2023-01-21 at 11 47 10 PM" src="https://user-images.githubusercontent.com/64021709/213901109-b58096dd-7f98-4be2-9b9b-466a6dbe93ea.png">
 
 
 ## Getting Started
