@@ -126,13 +126,13 @@ export default function Home({ posts = [] }) {
               >
                 <h1 className="text-3xl font-bold py-2">Check out your posts!</h1>
                 {posts.map((post: any, i) => {
-                  const data = JSON.parse(post.toxicity);
-                  // console.log(data);
+                  const data = (JSON.parse(post.toxicity));
+                  console.log(data);
 
-                  const insult = data[1];
-                  const obscene = data[2];
-                  const severe = data[3];
-                  const toxic = data[6];
+                  const insult = data[0];
+                  const obscene = data[1];
+                  const severe = data[2];
+                  const toxic = data[3];
                   // console.log(post)
                   return (
                     <div
@@ -178,8 +178,9 @@ export default function Home({ posts = [] }) {
                     </div>
                   );
                 })}
-              </div>
+                </div>
             )}
+            
 
             <div className="my-10 py-10 outline outline-1 outline-chalk rounded-3xl grid place-content-center gap-2">
               <h3 className="text-5xl text-chalk font-bold">New Post</h3>
