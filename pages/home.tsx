@@ -5,7 +5,7 @@ import { Authenticator } from "@aws-amplify/ui-react";
 import { Amplify, API, Auth, withSSRContext } from "aws-amplify";
 import Head from "next/head";
 import awsExports from "../src/aws-exports";
-import { createPost } from "../src/graphql/mutations";
+import { createPost, deletePost } from "../src/graphql/mutations";
 import { listPosts } from "../src/graphql/queries";
 require("@tensorflow/tfjs");
 // const toxicity = require('@tensorflow-models/toxicity');
@@ -13,6 +13,7 @@ import * as toxicity from "@tensorflow-models/toxicity";
 import { useState } from "react";
 import { SignIn } from "@aws-amplify/ui-react/dist/types/components/Authenticator/SignIn";
 import { useRouter } from "next/router";
+import { registerBackend } from "@tensorflow/tfjs";
 
 Amplify.configure({ ...awsExports, ssr: true });
 
@@ -35,17 +36,11 @@ export async function getServerSideProps({ req }: any) {
 
 async function handleCreatePost(event: any) {
   event.preventDefault();
-  const router = useRouter();
 
   async function analyseToxic(value: any) {
     let result = false;
     const threshold = 0.9;
-    let labelsToInclude = [
-      "insult",
-      "obscene",
-      "severe_toxicity",
-      "toxicity",
-    ];
+    let labelsToInclude = ["insult", "obscene", "severe_toxicity", "toxicity"];
 
     let prediction = toxicity
       .load(threshold, labelsToInclude)
@@ -79,8 +74,24 @@ async function handleCreatePost(event: any) {
         },
       },
     });
+    alert("deleted item")
+  } catch (errors: any) {
+    console.error(errors.errors[0]);
+    // throw new Error(errors.errors[0]);
+  }
+}
 
-    router.reload();
+async function deleteHandler(id: any) {
+  try {
+    const { data }: any = await API.graphql({
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+      query: deletePost,
+      variables: {
+        input: {
+          id: id,
+        },
+      },
+    });
   } catch (errors: any) {
     console.error(errors.errors[0]);
     // throw new Error(errors.errors[0]);
@@ -99,28 +110,23 @@ export default function Home({ posts = [] }) {
 
       <main className="p-20">
         <Authenticator className="">
-          <h1 className="text-5xl font-bold text-white">
-            Blog with sentiment analysis
-          </h1>
+          <h1 className="text-6xl font-bold text-white">Sentiment Analysis</h1>
+          <p className="">Post count: {posts.length}</p>
 
-          <div className="">
-            <p className="">{posts.length} post.</p>
-          </div>
-
-          <div className="">
+          <div className="py-10">
             <div
               id="old-posts"
-              className="outline outline-1 outline-text rounded-3xl p-10 flex flex-wrap"
+              className="outline outline-1 outline-text rounded-3xl p-10 flex flex-wrap place-content-center"
             >
               {posts.map((post: any, i) => {
-                const data = JSON.parse(post.toxicity)
-                console.log(data)
-                
-                const insult = data[1]
-                const obscene = data[2]
-                const severe =  data[3]
-                const toxic = data[6]
+                const data = JSON.parse(post.toxicity);
+                // console.log(data);
 
+                const insult = data[1];
+                const obscene = data[2];
+                const severe = data[3];
+                const toxic = data[6];
+                // console.log(post)
                 return (
                   <div
                     className="p-10 outline outline-1 outline-two rounded-3xl"
@@ -133,60 +139,76 @@ export default function Home({ posts = [] }) {
                       <strong>Content: </strong>
                       {post.content}
                     </p>
-                    <div id="measures" className="">
-                    <div>
-                      <strong>Insult: </strong>
-                        Match: {insult.results[0].match ? "True" : "False"} | Probability: {insult.results[0].probabilities[1]}
+                    <div id="measures" className="py-2">
+                      <div>
+                        <strong>Insult: </strong>
+                        Match: {insult.results[0].match ? "True" : "False"} |
+                        Probability: {insult.results[0].probabilities[1]}
+                      </div>
+                      <div>
+                        <strong>Obscene: </strong>
+                        Match: {obscene.results[0].match ? "True" : "False"} |
+                        Probability: {obscene.results[0].probabilities[1]}
+                      </div>
+                      <div>
+                        <strong>Severe: </strong>
+                        Match: {severe.results[0].match ? "True" : "False"} |
+                        Probability: {severe.results[0].probabilities[1]}
+                      </div>
+                      <div>
+                        <strong>Toxicity: </strong>
+                        Match: {toxic.results[0].match ? "True" : "False"} |
+                        Probability: {toxic.results[0].probabilities[1]}
+                      </div>
                     </div>
-                    <div>
-                      <strong>Obscene: </strong>
-                        Match: {obscene.results[0].match ? "True" : "False"} | Probability: {obscene.results[0].probabilities[1]}
-                    </div>
-                    <div>
-                      <strong>Severe: </strong>
-                        Match: {severe.results[0].match ? "True" : "False"} | Probability: {severe.results[0].probabilities[1]}
-                    </div>
-                    <div>
-                      <strong>Toxicity: </strong>
-                        Match: {toxic.results[0].match ? "True" : "False"} | Probability: {toxic.results[0].probabilities[1]}
-                    </div>
-                    </div>
-                    
+                    <button
+                      onClick={() => {
+                        deleteHandler(post.id);
+                      }}
+                    >
+                      Delete
+                    </button>
                   </div>
                 );
               })}
             </div>
 
-            <div className="">
-              <h3 className="">New Post</h3>
+            <div className="my-10 py-10 outline outline-1 outline-chalk rounded-3xl grid place-content-center gap-2">
+              <h3 className="text-5xl text-chalk font-bold">New Post</h3>
 
               <form
                 onSubmit={(event) => {
                   handleCreatePost(event);
                 }}
               >
-                <fieldset className="rounded-3xl">
-                  <legend className="text-2xl">Title</legend>
-                  <input
-                    placeholder={`Today, ${new Date().toLocaleTimeString()}`}
-                    defaultValue={`Today, ${new Date().toLocaleTimeString()}`}
-                    name="title"
-                  />
-                </fieldset>
+                <div className="py-2">
+                  <fieldset className="rounded-3xl">
+                    <legend className="text-2xl rounded-xl">Title</legend>
+                    <input
+                      className="text-black rounded-xl p-2"
+                      placeholder={`Today, ${new Date().toLocaleTimeString()}`}
+                      defaultValue={`Today, ${new Date().toLocaleTimeString()}`}
+                      name="title"
+                    />
+                  </fieldset>
+                </div>
 
-                <fieldset className="rounded-3xl">
-                  <legend>Content</legend>
-                  <textarea
-                    placeholder="I built an Amplify project with Next.js!"
-                    name="content"
-                    value={value}
-                    onChange={(e) => {
-                      setValue(e.target.value);
-                      // console.log(value)
-                      // analyseToxic()
-                    }}
-                  />
-                </fieldset>
+                <div className="py-2">
+                  <fieldset className="rounded-3xl">
+                    <legend className="text-2xl rounded-xl">Content</legend>
+                    <textarea
+                      className="rounded-xl p-2 text-black"
+                      placeholder="I built an Amplify project with Next.js!"
+                      name="content"
+                      value={value}
+                      onChange={(e) => {
+                        setValue(e.target.value);
+                        // console.log(value)
+                        // analyseToxic()
+                      }}
+                    />
+                  </fieldset>
+                </div>
 
                 <button className="rounded-2xl font-medium text-lg bg-one text-white p-4">
                   Create Post

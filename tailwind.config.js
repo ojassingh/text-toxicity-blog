@@ -18,6 +18,9 @@ module.exports = {
         gray: "#A6A6A6",
         faintblue: "#495B73"
       },
+      fontSize: {
+        '6xl': '3.5rem'
+      }
     },
   },
   plugins: ["tailwindcss", "postcss-preset-env"],
