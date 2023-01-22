@@ -74,7 +74,7 @@ async function handleCreatePost(event: any) {
         },
       },
     });
-    alert("deleted item")
+    alert("Done. Refresh to check changes.");
   } catch (errors: any) {
     console.error(errors.errors[0]);
     // throw new Error(errors.errors[0]);
@@ -92,6 +92,8 @@ async function deleteHandler(id: any) {
         },
       },
     });
+    alert("Done. Refresh to check changes.");
+    console.log(data);
   } catch (errors: any) {
     console.error(errors.errors[0]);
     // throw new Error(errors.errors[0]);
@@ -100,6 +102,8 @@ async function deleteHandler(id: any) {
 
 export default function Home({ posts = [] }) {
   const [value, setValue] = useState("");
+
+  // console.log(posts)
 
   return (
     <div className="text-chalk">
@@ -114,64 +118,68 @@ export default function Home({ posts = [] }) {
           <p className="">Post count: {posts.length}</p>
 
           <div className="py-10">
-            <div
-              id="old-posts"
-              className="outline outline-1 outline-text rounded-3xl p-10 flex flex-wrap place-content-center"
-            >
-              {posts.map((post: any, i) => {
-                const data = JSON.parse(post.toxicity);
-                // console.log(data);
+            {posts.length == 0 && <h1 className="text-xl font-bold">No older posts to display. Write a new one!</h1>}
+            {posts.length > 0 && (
+              <div
+                id="old-posts"
+                className="outline outline-1 outline-text rounded-3xl p-10 flex flex-wrap place-content-center"
+              >
+                <h1 className="text-3xl font-bold py-2">Check out your posts!</h1>
+                {posts.map((post: any, i) => {
+                  const data = JSON.parse(post.toxicity);
+                  // console.log(data);
 
-                const insult = data[1];
-                const obscene = data[2];
-                const severe = data[3];
-                const toxic = data[6];
-                // console.log(post)
-                return (
-                  <div
-                    className="p-10 outline outline-1 outline-two rounded-3xl"
-                    key={post.id}
-                  >
-                    <h3 className="">
-                      <strong>{i + 1}. Title: </strong> {post.title}
-                    </h3>
-                    <p>
-                      <strong>Content: </strong>
-                      {post.content}
-                    </p>
-                    <div id="measures" className="py-2">
-                      <div>
-                        <strong>Insult: </strong>
-                        Match: {insult.results[0].match ? "True" : "False"} |
-                        Probability: {insult.results[0].probabilities[1]}
-                      </div>
-                      <div>
-                        <strong>Obscene: </strong>
-                        Match: {obscene.results[0].match ? "True" : "False"} |
-                        Probability: {obscene.results[0].probabilities[1]}
-                      </div>
-                      <div>
-                        <strong>Severe: </strong>
-                        Match: {severe.results[0].match ? "True" : "False"} |
-                        Probability: {severe.results[0].probabilities[1]}
-                      </div>
-                      <div>
-                        <strong>Toxicity: </strong>
-                        Match: {toxic.results[0].match ? "True" : "False"} |
-                        Probability: {toxic.results[0].probabilities[1]}
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        deleteHandler(post.id);
-                      }}
+                  const insult = data[1];
+                  const obscene = data[2];
+                  const severe = data[3];
+                  const toxic = data[6];
+                  // console.log(post)
+                  return (
+                    <div
+                      className="p-10 outline outline-1 outline-two rounded-3xl"
+                      key={post.id}
                     >
-                      Delete
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+                      <h3 className="">
+                        <strong>{i + 1}. Title: </strong> {post.title}
+                      </h3>
+                      <p>
+                        <strong>Content: </strong>
+                        {post.content}
+                      </p>
+                      <div id="measures" className="py-2">
+                        <div>
+                          <strong>Insult: </strong>
+                          Match: {insult.results[0].match ? "True" : "False"} |
+                          Probability: {insult.results[0].probabilities[1]}
+                        </div>
+                        <div>
+                          <strong>Obscene: </strong>
+                          Match: {obscene.results[0].match ? "True" : "False"} |
+                          Probability: {obscene.results[0].probabilities[1]}
+                        </div>
+                        <div>
+                          <strong>Severe: </strong>
+                          Match: {severe.results[0].match ? "True" : "False"} |
+                          Probability: {severe.results[0].probabilities[1]}
+                        </div>
+                        <div>
+                          <strong>Toxicity: </strong>
+                          Match: {toxic.results[0].match ? "True" : "False"} |
+                          Probability: {toxic.results[0].probabilities[1]}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          deleteHandler(post.id);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
             <div className="my-10 py-10 outline outline-1 outline-chalk rounded-3xl grid place-content-center gap-2">
               <h3 className="text-5xl text-chalk font-bold">New Post</h3>
