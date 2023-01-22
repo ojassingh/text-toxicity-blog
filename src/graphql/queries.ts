@@ -8,6 +8,7 @@ export const getPost = /* GraphQL */ `
       id
       title
       content
+      toxicity
       createdAt
       updatedAt
       owner
@@ -25,6 +26,7 @@ export const listPosts = /* GraphQL */ `
         id
         title
         content
+        toxicity
         createdAt
         updatedAt
         owner

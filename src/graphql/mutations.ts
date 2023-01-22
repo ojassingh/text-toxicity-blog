@@ -11,6 +11,7 @@ export const createPost = /* GraphQL */ `
       id
       title
       content
+      toxicity
       createdAt
       updatedAt
       owner
@@ -26,6 +27,7 @@ export const updatePost = /* GraphQL */ `
       id
       title
       content
+      toxicity
       createdAt
       updatedAt
       owner
@@ -41,6 +43,7 @@ export const deletePost = /* GraphQL */ `
       id
       title
       content
+      toxicity
       createdAt
       updatedAt
       owner

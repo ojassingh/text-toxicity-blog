@@ -6,7 +6,19 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        one: "#032326",
+        two: "#255459",
+        three: "#177373",
+        four: "#F27777",
+        five: "#D98B8B",
+        back: "#262625",
+        chalk: '#F2F2F2',
+        gray: "#A6A6A6",
+        faintblue: "#495B73"
+      },
+    },
   },
-  plugins: [],
+  plugins: ["tailwindcss", "postcss-preset-env"],
 }
