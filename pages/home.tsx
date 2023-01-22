@@ -118,13 +118,14 @@ export default function Home({ posts = [] }) {
           <p className="">Post count: {posts.length}</p>
 
           <div className="py-10">
+          <h1 className="text-3xl font-bold pb-4">Check out your posts!</h1>
+
             {posts.length == 0 && <h1 className="text-xl font-bold">No older posts to display. Write a new one!</h1>}
             {posts.length > 0 && (
               <div
                 id="old-posts"
-                className="outline outline-1 outline-text rounded-3xl p-10 flex flex-wrap place-content-center"
+                className="outline outline-1 outline-text rounded-3xl p-10 flex flex-wrap place-content-center gap-4"
               >
-                <h1 className="text-3xl font-bold py-2">Check out your posts!</h1>
                 {posts.map((post: any, i) => {
                   const data = (JSON.parse(post.toxicity));
                   console.log(data);
@@ -149,7 +150,7 @@ export default function Home({ posts = [] }) {
                       <div id="measures" className="py-2">
                         <div>
                           <strong>Insult: </strong>
-                          Match: {insult.results[0].match ? "True" : "False"} |
+                          Match: {insult.results[0].match ? <span className="text-green-500">True</span> : <span className="text-red-500 inline">False</span>} |
                           Probability: {insult.results[0].probabilities[1]}
                         </div>
                         <div>
