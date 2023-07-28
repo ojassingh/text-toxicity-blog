@@ -7,7 +7,6 @@ Here is a glance at it:
 
 # AWS Amplify Next.js Sentiment Analysis App with TensorFlow.js
 
-![App Screenshot](screenshot.png)
 
 This repository contains an AWS Amplify and Next.js-based web application that performs sentiment analysis on blog posts using TensorFlow.js' text toxicity detection model. The app allows users to input text, such as blog posts or comments, and analyze the sentiment of the content to detect any toxic or negative language.
 
