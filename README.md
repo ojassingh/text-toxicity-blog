@@ -23,7 +23,8 @@ This repository contains an AWS Amplify and Next.js-based web application that p
 
 ## Demo
 
-A live demo of the app can be found [here](https://your-demo-link).
+Note (Update Jul 28 2023): this app is not in production anymore.
+
 
 ## Features
 
